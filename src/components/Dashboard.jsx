@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Droplet, Zap, Flame, Camera, MapPin, Wallet, Gift, CheckCircle2, Leaf, ArrowRight, Info, ShieldCheck, Scale } from 'lucide-react'
+import { Droplet, Zap, Flame, Camera, MapPin, Wallet, Gift, CheckCircle2, Leaf, ArrowRight, Info, ShieldCheck, Scale, X, Activity } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 const resourceData = [
@@ -11,17 +11,38 @@ const resourceData = [
 const Dashboard = () => {
   const [verifying, setVerifying] = useState(false)
   const [verified, setVerified] = useState(false)
+  const [totalPoints, setTotalPoints] = useState(1250)
+  
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalStep, setModalStep] = useState(1) // 1: form, 2: analyzing, 3: success
 
   const handleAIUpload = () => {
     setVerifying(true)
     setTimeout(() => {
       setVerifying(false)
       setVerified(true)
+      setTotalPoints(prev => prev + 50)
     }, 1500)
   }
 
+  const handleBillSubmit = (e) => {
+    e.preventDefault()
+    setModalStep(2)
+    // Simulate AI calculation of moving average
+    setTimeout(() => {
+      setModalStep(3)
+      setTotalPoints(prev => prev + 150)
+    }, 2000)
+  }
+
+  const resetModal = () => {
+    setIsModalOpen(false)
+    setTimeout(() => setModalStep(1), 300)
+  }
+
   return (
-    <div className="flex-col gap-4" style={{ height: 'calc(100vh - 120px)', display: 'flex', justifyContent: 'center' }}>
+    <div className="flex-col gap-4" style={{ height: 'calc(100vh - 120px)', display: 'flex', justifyContent: 'center', position: 'relative' }}>
       
       {/* 1. Header & Wallet */}
       <div className="flex justify-between items-center gap-4">
@@ -42,7 +63,7 @@ const Dashboard = () => {
           <div style={{ zIndex: 1 }}>
             <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tek Cüzdan: Yeşil Puan</div>
             <div className="flex items-end gap-1">
-              <span style={{ fontSize: '1.6rem', fontWeight: 800, lineHeight: 1, color: 'white' }}>1,250</span>
+              <span style={{ fontSize: '1.6rem', fontWeight: 800, lineHeight: 1, color: 'white' }}>{totalPoints.toLocaleString()}</span>
               <span style={{ color: 'var(--primary)', fontWeight: 600, fontSize: '0.85rem' }}>YP</span>
             </div>
           </div>
@@ -53,7 +74,12 @@ const Dashboard = () => {
       <div className="bento-grid" style={{ gap: '1rem', flex: 1 }}>
         
         {/* Bento Box 1: Resource Saving (Span 2) */}
-        <div className="glass-panel bento-col-span-2 flex-col justify-between" style={{ padding: '1.25rem', position: 'relative' }}>
+        <div 
+          className="glass-panel bento-col-span-2 flex-col justify-between" 
+          style={{ padding: '1.25rem', position: 'relative', cursor: 'pointer', transition: 'all 0.2s' }}
+          onClick={() => setIsModalOpen(true)}
+          title="Tasarruf sorgulamak için tıklayın"
+        >
           <div className="flex justify-between items-start">
             <div style={{ width: '100%' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
@@ -85,6 +111,9 @@ const Dashboard = () => {
                 <Bar dataKey="current" name="Net Güncel Tüketim" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={28} />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+          <div style={{ position: 'absolute', bottom: '1.25rem', right: '1.25rem' }}>
+            <button className="btn btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.75rem', background: '#3b82f6', color: 'white', border: 'none' }}>Sorgula</button>
           </div>
         </div>
 
@@ -164,6 +193,82 @@ const Dashboard = () => {
         </div>
 
       </div>
+
+      {/* Modal Overlay */}
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={resetModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Zap size={18} color="#3b82f6"/> Abonelik Sorgulama
+              </h3>
+              <button style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }} onClick={resetModal}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              {modalStep === 1 && (
+                <form onSubmit={handleBillSubmit} className="flex-col gap-4">
+                  <div className="badge flex items-center gap-1" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', borderColor: 'rgba(59, 130, 246, 0.2)', width: 'fit-content' }}>
+                    <ShieldCheck size={12}/> T.C. Kimlik İstenmez
+                  </div>
+                  
+                  <div className="flex-col gap-2">
+                    <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Fatura Türü</label>
+                    <select className="select-field" required>
+                      <option value="elektrik">Elektrik Faturası</option>
+                      <option value="su">Su Faturası</option>
+                      <option value="gaz">Doğalgaz Faturası</option>
+                    </select>
+                  </div>
+                  
+                  <div className="flex-col gap-2">
+                    <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Telefon Numarası</label>
+                    <input type="tel" className="input-field" placeholder="05XX XXX XX XX" required />
+                  </div>
+                  
+                  <div className="flex-col gap-2">
+                    <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Abonelik / Tesisat No</label>
+                    <input type="text" className="input-field" placeholder="Faturadaki abone numarası" required />
+                  </div>
+                  
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
+                    Tüketimi Analiz Et
+                  </button>
+                </form>
+              )}
+
+              {modalStep === 2 && (
+                <div className="flex-col items-center justify-center text-center gap-4" style={{ padding: '2rem 0' }}>
+                  <div style={{ color: '#3b82f6', animation: 'pulse-glow 1s infinite', borderRadius: '50%' }}>
+                    <Activity size={48} />
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Hareketli Ortalama Hesaplanıyor</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Son 3 aylık net tüketim verileriniz (m³/kWh) analiz ediliyor ve boş ev filtresinden geçiriliyor...</p>
+                  </div>
+                </div>
+              )}
+
+              {modalStep === 3 && (
+                <div className="flex-col items-center justify-center text-center gap-4" style={{ padding: '1rem 0' }}>
+                  <CheckCircle2 size={56} color="var(--primary)" style={{ animation: 'fade-in 0.3s ease-out' }} />
+                  <div>
+                    <h4 style={{ fontSize: '1.25rem', color: 'var(--primary)', marginBottom: '0.25rem' }}>Tebrikler! Tasarruf Tespit Edildi</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>Bu ay tüketiminiz son 3 aylık ortalamanızın %15 altında gerçekleşti.</p>
+                    <div className="badge badge-green" style={{ fontSize: '1rem', padding: '0.5rem 1rem' }}>+150 Yeşil Puan</div>
+                  </div>
+                  <button className="btn btn-secondary" style={{ width: '100%', marginTop: '1rem' }} onClick={resetModal}>
+                    Cüzdana Dön
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
