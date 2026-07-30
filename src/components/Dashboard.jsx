@@ -55,17 +55,19 @@ const Dashboard = () => {
         {/* Bento Box 1: Resource Saving (Span 2) */}
         <div className="glass-panel bento-col-span-2 flex-col justify-between" style={{ padding: '1.25rem', position: 'relative' }}>
           <div className="flex justify-between items-start">
-            <div>
-              <div className="badge mb-1 inline-block" style={{ fontSize: '0.65rem' }}>Kaynak Tasarrufu Modülü</div>
+            <div style={{ width: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                <div className="badge inline-block" style={{ fontSize: '0.65rem' }}>Kaynak Tasarrufu Modülü</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#60a5fa', fontSize: '0.7rem', fontWeight: 500, whiteSpace: 'nowrap' }}>
+                  <ShieldCheck size={14}/> Sadece Telefon + Abone No
+                </div>
+              </div>
               <h3 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Zap size={16} color="#3b82f6"/> Enerji ve Su Tüketimi
               </h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.2rem', maxWidth: '80%' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.2rem', maxWidth: '95%' }}>
                 Son 3 aylık hareketli ortalamanın (Moving Average) altına düştükçe puan kazanın. Zamlı TL tutarına değil, net <b>m³/kWh</b> miktarına bakılır. (Boş ev filtresi aktiftir).
               </p>
-            </div>
-            <div className="badge flex items-center gap-1" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', borderColor: 'rgba(59, 130, 246, 0.2)', fontSize: '0.65rem' }}>
-              <ShieldCheck size={12}/> Telefon + Abone No
             </div>
           </div>
           
@@ -87,9 +89,13 @@ const Dashboard = () => {
         </div>
 
         {/* Bento Box 2: AI Verification (Span 1) */}
-        <div className="glass-panel flex-col items-center justify-center text-center" style={{ padding: '1.25rem', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0) 100%)' }}>
-          <div className="badge badge-green mb-2" style={{ fontSize: '0.65rem' }}>Organik Atık Modülü</div>
+        <div className="glass-panel flex-col items-center justify-center text-center" style={{ padding: '1.25rem', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0) 100%)', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '1rem', left: '1.25rem' }}>
+             <div className="badge badge-green" style={{ fontSize: '0.65rem' }}>Organik Atık Modülü</div>
+          </div>
           
+          <div style={{ marginTop: '1rem' }} />
+
           {!verified ? (
             <>
               <div 
