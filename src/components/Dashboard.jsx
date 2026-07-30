@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Droplet, Zap, Flame, Camera, MapPin, Wallet, Gift, CheckCircle2, Leaf, ArrowRight, Info, ShieldCheck, Scale, X, Activity } from 'lucide-react'
+import { Droplet, Zap, Flame, Camera, MapPin, Wallet, Gift, CheckCircle2, Leaf, ArrowRight, Info, ShieldCheck, Scale, X, Activity, History } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 const resourceData = [
@@ -13,9 +13,18 @@ const Dashboard = () => {
   const [verified, setVerified] = useState(false)
   const [totalPoints, setTotalPoints] = useState(1250)
   
-  // Modal State
+  // Modals State
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalStep, setModalStep] = useState(1) // 1: form, 2: analyzing, 3: success
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
+
+  // History State
+  const [history, setHistory] = useState([
+    { id: 1, type: 'atık', title: '2 Litre Atık Yağ Teslimi', points: 50, date: 'Dün, 14:30' },
+    { id: 2, type: 'tasarruf', title: 'Aylık Su Tasarrufu', points: 150, date: 'Geçen Hafta' },
+    { id: 3, type: 'atık', title: '5 Kg Kompost Atık Teslimi', points: 120, date: '23 Temmuz' },
+    { id: 4, type: 'harcama', title: 'Market Kuponu Kullanımı', points: -200, date: '20 Temmuz' }
+  ])
 
   const handleAIUpload = () => {
     setVerifying(true)
@@ -23,22 +32,42 @@ const Dashboard = () => {
       setVerifying(false)
       setVerified(true)
       setTotalPoints(prev => prev + 50)
+      setHistory(prev => [{
+        id: Date.now(),
+        type: 'atık',
+        title: 'Organik Atık Doğrulandı (AI)',
+        points: 50,
+        date: 'Bugün, ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      }, ...prev])
     }, 1500)
   }
 
   const handleBillSubmit = (e) => {
     e.preventDefault()
     setModalStep(2)
-    // Simulate AI calculation of moving average
     setTimeout(() => {
       setModalStep(3)
       setTotalPoints(prev => prev + 150)
+      setHistory(prev => [{
+        id: Date.now(),
+        type: 'tasarruf',
+        title: 'Enerji Tasarrufu Tespit Edildi',
+        points: 150,
+        date: 'Bugün, ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      }, ...prev])
     }, 2000)
   }
 
   const resetModal = () => {
     setIsModalOpen(false)
     setTimeout(() => setModalStep(1), 300)
+  }
+
+  const renderHistoryIcon = (type) => {
+    if (type === 'atık') return <Leaf size={16} color="var(--primary)" />
+    if (type === 'tasarruf') return <Zap size={16} color="#3b82f6" />
+    if (type === 'harcama') return <Gift size={16} color="#ef4444" />
+    return <Activity size={16} />
   }
 
   return (
@@ -55,7 +84,13 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <div className="glass-panel flex items-center gap-3" style={{ padding: '0.75rem 1.25rem', background: 'rgba(16, 185, 129, 0.05)', position: 'relative', overflow: 'hidden' }}>
+        {/* CLICKABLE WALLET */}
+        <div 
+          className="glass-panel flex items-center gap-3" 
+          style={{ padding: '0.75rem 1.25rem', background: 'rgba(16, 185, 129, 0.05)', position: 'relative', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s', border: '1px solid rgba(16,185,129,0.2)' }}
+          onClick={() => setIsHistoryModalOpen(true)}
+          title="Atık ve Tasarruf Geçmişimi Gör"
+        >
           <div style={{ position: 'absolute', right: '-20px', top: '-20px', opacity: 0.1 }}><Leaf size={100} /></div>
           <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Wallet size={20} color="#05070a" />
@@ -194,7 +229,7 @@ const Dashboard = () => {
 
       </div>
 
-      {/* Modal Overlay */}
+      {/* Modal Overlay: Kaynak Tasarrufu */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={resetModal}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -264,6 +299,49 @@ const Dashboard = () => {
                   </button>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Overlay: History (Cüzdan) */}
+      {isHistoryModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsHistoryModalOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+            <div className="modal-header">
+              <h3 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <History size={18} color="var(--primary)"/> Atık ve Tasarruf Geçmişi
+              </h3>
+              <button style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }} onClick={() => setIsHistoryModalOpen(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="modal-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+              <div className="flex-col gap-3">
+                {history.map(item => (
+                  <div key={item.id} className="flex justify-between items-center" style={{ padding: '0.75rem', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--surface-border)' }}>
+                    <div className="flex items-center gap-3">
+                      <div style={{ 
+                        width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        background: item.type === 'atık' ? 'rgba(16, 185, 129, 0.1)' : item.type === 'tasarruf' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.1)'
+                      }}>
+                        {renderHistoryIcon(item.type)}
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '0.9rem', marginBottom: '0.1rem' }}>{item.title}</h4>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{item.date}</p>
+                      </div>
+                    </div>
+                    <div style={{ 
+                      fontSize: '1rem', fontWeight: '700', 
+                      color: item.points > 0 ? 'var(--primary)' : '#ef4444' 
+                    }}>
+                      {item.points > 0 ? '+' : ''}{item.points} YP
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
