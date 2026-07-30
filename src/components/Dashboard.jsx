@@ -56,7 +56,7 @@ const Dashboard = () => {
         <div className="glass-panel bento-col-span-2 flex-col justify-between" style={{ padding: '1.25rem', position: 'relative' }}>
           <div className="flex justify-between items-start">
             <div>
-              <div className="badge mb-1 inline-block" style={{ fontSize: '0.65rem' }}>Akış 1: Kaynak Tasarrufu Modülü</div>
+              <div className="badge mb-1 inline-block" style={{ fontSize: '0.65rem' }}>Kaynak Tasarrufu Modülü</div>
               <h3 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Zap size={16} color="#3b82f6"/> Enerji ve Su Tüketimi
               </h3>
@@ -88,7 +88,7 @@ const Dashboard = () => {
 
         {/* Bento Box 2: AI Verification (Span 1) */}
         <div className="glass-panel flex-col items-center justify-center text-center" style={{ padding: '1.25rem', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0) 100%)' }}>
-          <div className="badge badge-green mb-2" style={{ fontSize: '0.65rem' }}>Akış 2: Organik Atık Modülü</div>
+          <div className="badge badge-green mb-2" style={{ fontSize: '0.65rem' }}>Organik Atık Modülü</div>
           
           {!verified ? (
             <>
