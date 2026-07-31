@@ -71,7 +71,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex-col gap-4" style={{ height: 'calc(100vh - 120px)', display: 'flex', justifyContent: 'center', position: 'relative' }}>
+    <div className="flex-col gap-4" style={{ minHeight: 'calc(100vh - 120px)', paddingBottom: '3rem', display: 'flex', justifyContent: 'center', position: 'relative' }}>
       
       {/* 1. Header & Wallet */}
       <div className="flex justify-between items-center gap-4">
