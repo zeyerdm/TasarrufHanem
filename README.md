@@ -1,16 +1,63 @@
-# React + Vite
+# 🌱 TasarrufHanem — Evden Başlayan Yeşil Dönüşüm
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> Su, elektrik ve doğalgaz tasarrufunu organik atık yönetimiyle tek platformda birleştiren, tasarruf eden hanelere "Yeşil Puan" kazandıran web uygulaması prototipi.
+>
+> *A web app prototype that rewards households with "Green Points" for saving water, electricity and gas and for sorting organic waste.*
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![React Router](https://img.shields.io/badge/React%20Router-7-CA4245?logo=reactrouter&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222?logo=githubpages&logoColor=white)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📌 Proje Hakkında
 
-## React Compiler
+TasarrufHanem, COP31 vizyonu ve adil dönüşüm hedefleri doğrultusunda tasarlanmış bir sürdürülebilirlik platformudur. Haneler kaynak tüketimlerini azalttıkça ve organik atıklarını ayrıştırdıkça puan kazanır; biriken puanlar kampanya ve kuponlarda kullanılabilir.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Özellikler
 
-## Expanding the Oxlint configuration
+| Modül | Açıklama |
+| --- | --- |
+| **Kaynak Tasarrufu** | Son 3 aylık hareketli ortalamaya göre net m³ / kWh tüketimi analiz edilir, ortalamanın altında kalan haneler puan kazanır. |
+| **Organik Atık (Proof of Action)** | Evde yapılan atık ayrıştırma, yapay zekâ (bilgisayarlı görü) doğrulama akışıyla onaylanır. |
+| **KVKK Dostu Cüzdan** | T.C. kimlik no veya e-Devlet şifresi istenmez; telefon ve abone numarasıyla eşleştirilerek Yeşil Puan biriktirilir. |
+| **Kullanıcı Paneli** | Puan bakiyesi, işlem geçmişi (atık teslimi, tasarruf, harcama) ve grafiklerle tüketim özeti. |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## 🛠️ Kullanılan Teknolojiler
+
+- **Arayüz:** React 19, React Router 7 (HashRouter)
+- **Grafikler:** Recharts
+- **İkonlar:** lucide-react
+- **Derleme & Lint:** Vite 8, Oxlint
+- **Dağıtım:** GitHub Actions ile GitHub Pages
+
+## 📁 Proje Yapısı
+
+```
+.
+├── src/
+│   ├── App.jsx                 # Router ve gezinme çubuğu
+│   ├── components/Hero.jsx     # Giriş bölümü
+│   └── pages/
+│       ├── Home.jsx            # Tanıtım sayfası
+│       ├── Login.jsx           # Giriş ekranı
+│       └── DashboardPage.jsx   # Yeşil Puan paneli
+├── public/
+└── .github/workflows/deploy.yml  # GitHub Pages dağıtımı
+```
+
+## 🚀 Kurulum
+
+```bash
+npm install
+npm run dev      # geliştirme sunucusu
+npm run build    # üretim derlemesi (dist/)
+npm run lint     # Oxlint
+```
+
+`main` dalına yapılan her push, GitHub Actions üzerinden otomatik olarak GitHub Pages'e dağıtılır.
+
+> Bu sürüm bir arayüz prototipidir; tüketim verileri ve işlem geçmişi örnek verilerle gösterilmektedir.
+
+## 👩‍💻 Geliştirici
+
+**Zeynep Erdem** — [github.com/zeyerdm](https://github.com/zeyerdm)
